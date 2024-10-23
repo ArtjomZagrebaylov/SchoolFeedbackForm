@@ -7,10 +7,16 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
         }
         .container {
             max-width: 600px;
-            margin: 50px auto;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
             text-align: center;
@@ -18,13 +24,12 @@
         table {
             width: 100%;
             margin-bottom: 20px;
-        }
-        table, th, td {
             border-collapse: collapse;
         }
         th, td {
             padding: 10px;
             text-align: left;
+            border: 1px solid #ddd;
         }
         th {
             background-color: #f4f4f4;
@@ -37,14 +42,20 @@
             height: 100px;
             margin-top: 20px;
             padding: 10px;
+            border: 1px solid #ddd;
         }
         .btn-submit {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
             text-align: center;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -63,35 +74,35 @@
                 </tr>
                 <tr>
                     <td>Opportunity to develop leadership skills</td>
-                    <td><input type="radio" name="leadership" value="1"></td>
-                    <td><input type="radio" name="leadership" value="2"></td>
-                    <td><input type="radio" name="leadership" value="3"></td>
-                    <td><input type="radio" name="leadership" value="4"></td>
-                    <td><input type="radio" name="leadership" value="5"></td>
+                    <td><input type="radio" name="leadership" value="1" required></td>
+                    <td><input type="radio" name="leadership" value="2" required></td>
+                    <td><input type="radio" name="leadership" value="3" required></td>
+                    <td><input type="radio" name="leadership" value="4" required></td>
+                    <td><input type="radio" name="leadership" value="5" required></td>
                 </tr>
                 <tr>
                     <td>Opportunity to develop experience through co-ops, internships, or other school-facilitated programs</td>
-                    <td><input type="radio" name="internships" value="1"></td>
-                    <td><input type="radio" name="internships" value="2"></td>
-                    <td><input type="radio" name="internships" value="3"></td>
-                    <td><input type="radio" name="internships" value="4"></td>
-                    <td><input type="radio" name="internships" value="5"></td>
+                    <td><input type="radio" name="internships" value="1" required></td>
+                    <td><input type="radio" name="internships" value="2" required></td>
+                    <td><input type="radio" name="internships" value="3" required></td>
+                    <td><input type="radio" name="internships" value="4" required></td>
+                    <td><input type="radio" name="internships" value="5" required></td>
                 </tr>
                 <tr>
-                    <td>Opportunity to further professional development (career mentorship, resume evaluation, networking seminars)</td>
-                    <td><input type="radio" name="professional" value="1"></td>
-                    <td><input type="radio" name="professional" value="2"></td>
-                    <td><input type="radio" name="professional" value="3"></td>
-                    <td><input type="radio" name="professional" value="4"></td>
-                    <td><input type="radio" name="professional" value="5"></td>
+                    <td>Opportunity to further professional development</td>
+                    <td><input type="radio" name="professional" value="1" required></td>
+                    <td><input type="radio" name="professional" value="2" required></td>
+                    <td><input type="radio" name="professional" value="3" required></td>
+                    <td><input type="radio" name="professional" value="4" required></td>
+                    <td><input type="radio" name="professional" value="5" required></td>
                 </tr>
                 <tr>
                     <td>Exchange programs and other international opportunities</td>
-                    <td><input type="radio" name="exchange" value="1"></td>
-                    <td><input type="radio" name="exchange" value="2"></td>
-                    <td><input type="radio" name="exchange" value="3"></td>
-                    <td><input type="radio" name="exchange" value="4"></td>
-                    <td><input type="radio" name="exchange" value="5"></td>
+                    <td><input type="radio" name="exchange" value="1" required></td>
+                    <td><input type="radio" name="exchange" value="2" required></td>
+                    <td><input type="radio" name="exchange" value="3" required></td>
+                    <td><input type="radio" name="exchange" value="4" required></td>
+                    <td><input type="radio" name="exchange" value="5" required></td>
                 </tr>
             </table>
 
@@ -110,8 +121,23 @@
             formData.forEach((value, key) => {
                 data[key] = value;
             });
-            console.log(data);
-            alert("Thank you for your feedback!");
+
+
+            fetch('http://localhost:5000/submit-feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert(result.message);
+            })
+            .catch(error => {
+                alert('Error submitting feedback!');
+                console.error('Error:', error);
+            });
         });
     </script>
 </body>
